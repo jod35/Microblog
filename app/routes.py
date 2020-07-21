@@ -7,5 +7,7 @@ def hello():
     user={
         'user':"Jonathan"
     }
-    return render_template('index.html',user=user)
+
+    title="Hello"
+    return render_template('index.html',user=user,title=title)
            
