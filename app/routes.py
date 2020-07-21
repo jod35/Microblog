@@ -18,7 +18,7 @@ posts=[
 
 @app.route('/')
 @app.route('/hello')
-def hello():
+def index():
     user={
         'user':"Jonathan"
     }
@@ -32,7 +32,16 @@ def hello():
 @app.route('/login',methods=['GET','POST'])
 def login():
     form=LoginForm()
+
+    # with form.username.errors and form.password.errors as errors:
+    #     if errors:
+    #         for error in errors:
+    #             flash(error)
+    #             return redirect('/login')
+
+
     if form.validate_on_submit():
+
         flash("Login requested for user {} , remember_me ={}".format(form.username.data,form.remember_me.data))
         return redirect('/')
     return render_template('login.html',form=form,title="Login")
