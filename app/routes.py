@@ -1,7 +1,9 @@
 from app import app
-from flask import render_template,flash,request,redirect
+from flask import render_template,flash,request,redirect,url_for
 from .forms import LoginForm
-
+from flask_login import current_user,login_user,logout_user,login_required
+from .models import User,Post
+from werkzeug.urls import url_parse
 
 posts=[
     {
@@ -17,7 +19,7 @@ posts=[
 ]
 
 @app.route('/')
-@app.route('/hello')
+@app.route('/index')
 def index():
     user={
         'user':"Jonathan"
@@ -40,8 +42,37 @@ def login():
     #             return redirect('/login')
 
 
-    if form.validate_on_submit():
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
 
-        flash("Login requested for user {} , remember_me ={}".format(form.username.data,form.remember_me.data))
-        return redirect('/')
+
+    if form.validate_on_submit():
+        user=User.query.filter_by(username=form.username.data).first()
+
+        if not user and not user.check_password(user.passwd_hash,form.password.data):
+            flash("Invalid username or password!")
+
+            return redirect(url_for('login'))
+
+        login_user(user,remember=form.remember_me.data)
+
+        next_page = request.args.get('next')
+
+        if not next_page or url_parse(next_page).netloc != '':
+
+            next_page=url_for('index')
+        return redirect(next_page)
+
     return render_template('login.html',form=form,title="Login")
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
+
+@app.route('/profile')
+@login_required
+def user_profile():
+    return "My profile"
