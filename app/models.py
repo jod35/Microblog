@@ -4,14 +4,15 @@ from datetime import datetime
 class User(db.Model):
     id=db.Column(db.Integer,primary_key=True)
     username=db.Column(db.String(64),nullable=False)
-    passwd_hash=db.Column(db.String(128))
+    passwd_hash=db.Column(db.String(128),nullable=False)
     email=db.Column(db.String(40),nullable=False)
     posts=db.relationship('Post',backref='author',lazy=True)
     
 
 
-    def __init__(self,username,passwd_hash):
+    def __init__(self,username,email,passwd_hash):
         self.username=username
+        self.email=email
         self.passwd_hash=passwd_hash
 
     def __repr__(self):

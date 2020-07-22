@@ -8,5 +8,5 @@ class Config:
     
 
     #for windows, I am on windows
-    SQLALCHEMY_DATABASE_URI=os.environ.get('SQLALCHEMY_DATABASE_URI') or 'sqlite:///C:/Users/Jonathan/coding/migroblog/site.db'
+    SQLALCHEMY_DATABASE_URI=os.environ.get('SQLALCHEMY_DATABASE_URI') or 'sqlite:///C:/Users/Jonathan/coding/migroblog/app.db'
     SQLALCHEMY_TRACK_MODIFICATIONS=False
