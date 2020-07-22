@@ -28,7 +28,7 @@ def index():
 
 
     title="Hello"
-    return render_template('index.html',user=user,title=title,posts=posts)
+    return render_template('index.html',title=title,posts=posts)
            
 
 @app.route('/login',methods=['GET','POST'])
