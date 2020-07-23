@@ -2,17 +2,23 @@
 {% block body %}
     <h1>User: {{user.username}}</h1>
     
+    {% if user.bio %}
+        {{ user.bio }}
+    {% endif %}
+        <br>
+        <br>
     {% if user.last_seen %}
        <b>
            last seen  {{ user.last_seen.strftime('%x at %T') }}
        </b>
     {% endif %}
-
     
-    {% if user.bio %}
-        {{ user.bio }}
+    
+    <br>
+    <br>
+    {% if user ==current_user %}
+        <a href="{{ url_for('edit_profile',username=current_user.username) }}">Edit Profile</a>
     {% endif %}
-        
         
     <hr>
 

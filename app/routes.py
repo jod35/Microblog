@@ -1,6 +1,6 @@
 from app import app,db
 from flask import render_template,flash,request,redirect,url_for
-from .forms import LoginForm,RegistrationForm
+from .forms import LoginForm,RegistrationForm,EditProfileForm
 from flask_login import current_user,login_user,logout_user,login_required
 from .models import User,Post
 from werkzeug.urls import url_parse
@@ -98,3 +98,29 @@ def before_request():
     if current_user.is_authenticated:
         current_user.last_seen=datetime.utcnow()
         db.session.commit()
+
+
+@app.route('/edit_profile/',methods=['GET','POST'])
+def edit_profile():
+
+    form=EditProfileForm()
+
+    if request.method == "POST":
+        current_user.username=request.form.get('username')
+        current_user.bio=request.form.get('bio')
+        db.session.commit()
+
+        flash("Changes updated successfully")
+        return redirect(url_for('user_profile',username=current_user.username))
+
+    elif request.method == "GET":
+        form.username.data=current_user.username
+        form.bio.data=current_user.bio
+    return render_template('editprofile.html',form=form)
+
+
+
+
+
+
+

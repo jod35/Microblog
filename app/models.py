@@ -6,11 +6,11 @@ from app import login_manager
 
 class User(db.Model,UserMixin):
     id=db.Column(db.Integer,primary_key=True)
-    username=db.Column(db.String(64),nullable=False)
+    username=db.Column(db.String(64),nullable=False,unique=True)
     bio=db.Column(db.String(140))
     last_seen=db.Column(db.DateTime(),default=datetime.utcnow)
     passwd_hash=db.Column(db.String(128),nullable=False)
-    email=db.Column(db.String(40),nullable=False)
+    email=db.Column(db.String(40),nullable=False,unique=True)
     posts=db.relationship('Post',backref='author',lazy=True)
     
 
