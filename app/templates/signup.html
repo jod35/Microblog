@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block body %}
+    <h2>Sign Up</h2>
+   <form action="{{ url_for('sign_up') }}" method="post">
+    <div class="form">
+        {{ form.hidden_tag() }}
+        <p>{{form.username.label}}
+            <br>
+            {{form.username()}}
+            {% if form.username.errors %}
+            <ul>
+                {% for error in form.username.errors %}
+                <li style="color: red;">{{ error }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </p>
+        <p>{{form.email.label}}
+            <br>
+            {{form.email()}}
+            {% if form.email.errors %}
+                <ul>
+                    {% for error in form.email.errors %}
+                    <li style="color: red;">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>{{form.password.label}}
+            <br>
+            {{form.password()}}
+            {% if form.password.errors %}
+                <ul>
+                    {% for error in form.password.errors %}
+                    <li style="color: red;">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+                
+        </p>
+        <p>{{form.password2.label}}
+            <br>
+            {{form.password2()}}
+            {% if form.password.errors %}
+                <ul>
+                    {% for error in form.password.errors %}
+                    <li style="color: red;">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.submit }}
+        </p>
+
+        <p>
+            Already have an account, <a href="{{ url_for('login') }}">Login</a>
+        </p>
+
+    </div>
+   </form>
+{% endblock body %}
+    

@@ -1,6 +1,6 @@
-from app import app
+from app import app,db
 from flask import render_template,flash,request,redirect,url_for
-from .forms import LoginForm
+from .forms import LoginForm,RegistrationForm
 from flask_login import current_user,login_user,logout_user,login_required
 from .models import User,Post
 from werkzeug.urls import url_parse
@@ -34,14 +34,7 @@ def index():
 @app.route('/login',methods=['GET','POST'])
 def login():
     form=LoginForm()
-
-    # with form.username.errors and form.password.errors as errors:
-    #     if errors:
-    #         for error in errors:
-    #             flash(error)
-    #             return redirect('/login')
-
-
+    
     if current_user.is_authenticated:
         return redirect(url_for('index'))
 
@@ -76,3 +69,20 @@ def logout():
 @login_required
 def user_profile():
     return "My profile"
+
+
+@app.route('/register',methods=['GET','POST'])
+def sign_up():
+    form=RegistrationForm()
+    if request.method =='POST':
+        new_user=User(username=request.form.get('username'),email=request.form.get('email'))
+        new_user.set_password(request.form.get('password'))
+
+        db.session.add(new_user)
+        db.session.commit()
+
+        flash("Account Created successfully, You can now log in.")
+
+        return redirect(url_for('login'))
+
+    return render_template('signup.html',form=form)
