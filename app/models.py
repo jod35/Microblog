@@ -4,6 +4,14 @@ from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import UserMixin
 from app import login_manager
 
+
+#follower association table
+
+followers=db.Table(
+    'followers',
+    db.Column('follower_id',db.Integer,db.ForeignKey('user.id')),
+    db.Column('follower_id',db.Integer,db.ForeignKey('user.id')),
+)
 class User(db.Model,UserMixin):
     id=db.Column(db.Integer,primary_key=True)
     username=db.Column(db.String(64),nullable=False,unique=True)
@@ -13,6 +21,13 @@ class User(db.Model,UserMixin):
     email=db.Column(db.String(40),nullable=False,unique=True)
     posts=db.relationship('Post',backref='author',lazy=True)
     
+    #the relation(m2m)
+    followed=db.relationship(
+        'User',secondary=followers,
+        primaryjoin=(followers.c.follower_id==id),
+        secondaryjoin=(followers.c.follower_id==id),
+        backref=db.backref('followers',lazy='dynamic'),lazy='dynamic'
+    )
 
 
     # def __init__(self,username,email,passwd_hash):
@@ -28,6 +43,20 @@ class User(db.Model,UserMixin):
 
     def check_password(self,password):
         return check_password_hash(self.passwd_hash,password)
+
+
+    def follow(self,user):
+        if not self.is_following(user):
+            self.followed.append(user)
+
+    def unfollow(self,user):
+        if self.is_following():
+            self.followed.remove(user)
+
+    def is_following(self,user):
+        return self.followed.filter(
+            followers.c.follower_id == user.id).count >0
+        
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -47,3 +76,5 @@ class Post(db.Model):
 
     def __repr__(self):
         return f"<Post {self.title}>"
+
+
