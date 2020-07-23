@@ -1,6 +1,20 @@
 {% extends 'base.html' %}
 {% block body %}
-    <h1>User {{user.username}}</h1>
+    <h1>User: {{user.username}}</h1>
+    
+    {% if user.last_seen %}
+       <b>
+           last seen  {{ user.last_seen.strftime('%x at %T') }}
+       </b>
+    {% endif %}
+
+    
+    {% if user.bio %}
+        {{ user.bio }}
+    {% endif %}
+        
+        
+    <hr>
 
     <h3>{{user.username}} says:</h3>
     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Culpa, repudiandae.</p>
