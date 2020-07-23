@@ -65,10 +65,13 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/profile')
+@app.route('/profile/<username>')
 @login_required
-def user_profile():
-    return "My profile"
+def user_profile(username):
+    user=User.query.filter_by(username=username).first()
+
+
+    return render_template('profile.html',user=user)
 
 
 @app.route('/register',methods=['GET','POST'])

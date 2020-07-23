@@ -20,6 +20,7 @@
         <a href="{{ url_for('login')}}">Login</a>
         <a href="{{ url_for('sign_up') }}">Sign Up</a>
         {% else %}
+        <a href="{{ url_for('user_profile',username=current_user.username) }}">Profile</a>
         <a href="{{url_for('logout')}}">Logout</a>
         {% endif %}
             
